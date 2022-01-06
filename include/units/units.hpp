@@ -43,28 +43,28 @@ class unit {
     constexpr explicit unit(value_type v) : value_{v} {}
 
     template <typename R>
-    constexpr unit(const unit<Meas, Val, R>& p)
-        : unit{p.value() * R::num * Ratio::den / R::den / Ratio::num} {}
+    constexpr unit(const unit<Meas, Val, R>& u)
+        : unit{u.value() * R::num * Ratio::den / R::den / Ratio::num} {}
 
     constexpr value_type value() const { return value_; }
 
-    constexpr unit& operator+=(const unit& other) {
-        value_ += other.value_; 
+    constexpr unit& operator+=(const unit& u) {
+        value_ += u.value_; 
         return *this;
     }
     
-    constexpr unit& operator-=(const unit& other) {
-        value_ -= other.value_; 
+    constexpr unit& operator-=(const unit& u) {
+        value_ -= u.value_; 
         return *this;
     }
 
-    constexpr unit& operator*=(const value_type& rhs) {
-        value_ *= rhs; 
+    constexpr unit& operator*=(const value_type& x) {
+        value_ *= x; 
         return *this;
     }
 
-    constexpr unit& operator/=(const value_type& rhs) {
-        value_ /= rhs; 
+    constexpr unit& operator/=(const value_type& x) {
+        value_ /= x; 
         return *this;
     }
 
@@ -73,32 +73,62 @@ class unit {
 };
 
 template <typename M, typename V, typename R>
-constexpr auto operator+(const unit<M, V, R>& lhs, const unit<M, V, R>& rhs) {
-    return unit<M, V, R>{lhs.value() + rhs.value()};
+constexpr auto operator+(const unit<M, V, R>& x, const unit<M, V, R>& y) {
+    return unit<M, V, R>{x.value() + y.value()};
 }
 
 template <typename M, typename V, typename R>
-constexpr auto operator-(const unit<M, V, R>& lhs, const unit<M, V, R>& rhs) {
-    return unit<M, V, R>{lhs.value() - rhs.value()};
+constexpr auto operator-(const unit<M, V, R>& x, const unit<M, V, R>& y) {
+    return unit<M, V, R>{x.value() - y.value()};
 }
 
 template <typename M, typename V1, typename R, typename V2>
-constexpr auto operator*(const unit<M, V1, R>& lhs, const V2& rhs) {
-    return unit<M, V1, R>{lhs.value() * rhs};
+constexpr auto operator*(const unit<M, V1, R>& x, const V2& y) {
+    return unit<M, V1, R>{x.value() * y};
 }
 
 template <typename M, typename V1, typename R, typename V2>
-constexpr auto operator*(const V2& lhs, const unit<M, V1, R>& rhs) {
-    return unit<M, V1, R>{lhs * rhs.value()};
+constexpr auto operator*(const V2& x, const unit<M, V1, R>& y) {
+    return unit<M, V1, R>{x * y.value()};
 }
 
 template <typename M, typename V1, typename R, typename V2>
-constexpr auto operator/(const unit<M, V1, R>& lhs, const V2& rhs) {
-    return unit<M, V1, R>{lhs.value() / rhs};
+constexpr auto operator/(const unit<M, V1, R>& x, const V2& y) {
+    return unit<M, V1, R>{x.value() / y};
 }
 
 template <typename M, typename V, typename R>
-constexpr auto operator/(const unit<M, V, R>& lhs, const unit<M, V, R>& rhs) {
-    return lhs.value() / rhs.value();
+constexpr auto operator/(const unit<M, V, R>& x, const unit<M, V, R>& y) {
+    return x.value() / y.value();
+}
+
+template <typename M, typename V, typename R>
+constexpr bool operator==(const unit<M, V, R>& x, const unit<M, V, R>& y) {
+    return x.value() == y.value();
+}
+
+template <typename M, typename V, typename R>
+constexpr bool operator!=(const unit<M, V, R>& x, const unit<M, V, R>& y) {
+    return !(x == y);
+}
+
+template <typename M, typename V, typename R>
+constexpr bool operator<(const unit<M, V, R>& x, const unit<M, V, R>& y) {
+    return x.value() < y.value();
+}
+
+template <typename M, typename V, typename R>
+constexpr bool operator>(const unit<M, V, R>& x, const unit<M, V, R>& y) {
+    return y < x;
+}
+
+template <typename M, typename V, typename R>
+constexpr bool operator<=(const unit<M, V, R>& x, const unit<M, V, R>& y) {
+    return !(y < x);
+}
+
+template <typename M, typename V, typename R>
+constexpr bool operator>=(const unit<M, V, R>& x, const unit<M, V, R>& y) {
+    return !(x < y);
 }
 } // namespace units
