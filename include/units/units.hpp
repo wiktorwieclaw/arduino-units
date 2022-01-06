@@ -48,6 +48,14 @@ class unit {
 
     constexpr value_type value() const { return value_; }
 
+    constexpr unit operator+() const {
+        return *this;
+    }
+
+    constexpr unit operator-() const {
+        return unit{value_};
+    }
+
     constexpr unit& operator+=(const unit& u) {
         value_ += u.value_; 
         return *this;
