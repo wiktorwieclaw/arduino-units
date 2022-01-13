@@ -53,7 +53,7 @@ class unit {
     }
 
     constexpr unit operator-() const {
-        return unit{value_};
+        return unit{-value_};
     }
 
     constexpr unit& operator+=(const unit& u) {
@@ -76,67 +76,55 @@ class unit {
         return *this;
     }
 
+    friend constexpr auto operator+(const unit& x, const unit& y) {
+        return unit{x.value_ + y.value_};
+    }
+    
+    friend constexpr auto operator-(const unit& x, const unit& y) {
+        return unit{x.value_ - y.value_};
+    }
+    
+    friend constexpr auto operator*(const unit& x, const value_type& y) {
+        return unit{x.value_ * y};
+    }
+    
+    friend constexpr auto operator*(const value_type& x, const unit& y) {
+        return unit{x * y.value_};
+    }
+
+    friend constexpr auto operator/(const unit& x, const value_type& y) {
+        return unit{x.value_ / y};
+    }
+
+    friend constexpr auto operator/(const unit& x, const unit& y) {
+        return x.value_ / y.value_;
+    }
+
+    friend constexpr bool operator==(const unit& x, const unit& y) {
+        return x.value_ == y.value_;
+    }
+    
+    friend constexpr bool operator!=(const unit& x, const unit& y) {
+        return !(x == y);
+    }
+    
+    friend constexpr bool operator<(const unit& x, const unit& y) {
+        return x.value_ < y.value_;
+    }
+    
+    friend constexpr bool operator>(const unit& x, const unit& y) {
+        return y < x;
+    }
+
+    friend constexpr bool operator<=(const unit& x, const unit& y) {
+        return !(y < x);
+    }
+
+    friend constexpr bool operator>=(const unit& x, const unit& y) {
+        return !(x < y);
+    }
+
    private:
     value_type value_;
 };
-
-template <typename M, typename V, typename R>
-constexpr auto operator+(const unit<M, V, R>& x, const unit<M, V, R>& y) {
-    return unit<M, V, R>{x.value() + y.value()};
-}
-
-template <typename M, typename V, typename R>
-constexpr auto operator-(const unit<M, V, R>& x, const unit<M, V, R>& y) {
-    return unit<M, V, R>{x.value() - y.value()};
-}
-
-template <typename M, typename V1, typename R, typename V2>
-constexpr auto operator*(const unit<M, V1, R>& x, const V2& y) {
-    return unit<M, V1, R>{x.value() * y};
-}
-
-template <typename M, typename V1, typename R, typename V2>
-constexpr auto operator*(const V2& x, const unit<M, V1, R>& y) {
-    return unit<M, V1, R>{x * y.value()};
-}
-
-template <typename M, typename V1, typename R, typename V2>
-constexpr auto operator/(const unit<M, V1, R>& x, const V2& y) {
-    return unit<M, V1, R>{x.value() / y};
-}
-
-template <typename M, typename V, typename R>
-constexpr auto operator/(const unit<M, V, R>& x, const unit<M, V, R>& y) {
-    return x.value() / y.value();
-}
-
-template <typename M, typename V, typename R>
-constexpr bool operator==(const unit<M, V, R>& x, const unit<M, V, R>& y) {
-    return x.value() == y.value();
-}
-
-template <typename M, typename V, typename R>
-constexpr bool operator!=(const unit<M, V, R>& x, const unit<M, V, R>& y) {
-    return !(x == y);
-}
-
-template <typename M, typename V, typename R>
-constexpr bool operator<(const unit<M, V, R>& x, const unit<M, V, R>& y) {
-    return x.value() < y.value();
-}
-
-template <typename M, typename V, typename R>
-constexpr bool operator>(const unit<M, V, R>& x, const unit<M, V, R>& y) {
-    return y < x;
-}
-
-template <typename M, typename V, typename R>
-constexpr bool operator<=(const unit<M, V, R>& x, const unit<M, V, R>& y) {
-    return !(y < x);
-}
-
-template <typename M, typename V, typename R>
-constexpr bool operator>=(const unit<M, V, R>& x, const unit<M, V, R>& y) {
-    return !(x < y);
-}
 } // namespace units
