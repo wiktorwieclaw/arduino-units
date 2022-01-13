@@ -40,6 +40,8 @@ class unit {
     using value_type = Val;
     using ratio_type = Ratio;
 
+    constexpr unit() = default; 
+
     constexpr explicit unit(value_type v) : value_{v} {}
 
     template <typename R>
@@ -125,6 +127,6 @@ class unit {
     }
 
    private:
-    value_type value_;
+    value_type value_{};
 };
 } // namespace units
